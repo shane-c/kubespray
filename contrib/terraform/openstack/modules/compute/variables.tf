@@ -96,4 +96,3 @@ variable "worker_allowed_ports" {
   type = "list"
 }
 
-
