@@ -1,7 +1,9 @@
 clusters:
   - name: auth-service
     cluster:
+{% if openstack_cacert is defined and openstack_cacert != "" %}
       certificate-authority: "{{ kube_config_dir }}/openstack-cacert.pem"
+{% endif %} 
       server: "{{ kube_authentication_token_webhook_url }}"
 contexts:
   - context:
