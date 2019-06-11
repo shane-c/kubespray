@@ -110,7 +110,11 @@
     --skip-phases=addon/coredns
     {% if kubeadm_version is version('v1.14.0', '>=') %}
     --experimental-upload-certs
-    {% if kubeadm_certificate_key is defined %}
+    {% endif %}
+    {% if kubeadm_version is version('v1.13.0', '>=') %}
+    --skip-phases=addon/coredns
+    {% endif %}
+    {% if kubeadm_version is version('v1.13.0', '>=') and kubeadm_certificate_key is defined %}
     --certificate-key={{ kubeadm_certificate_key }}
     {% endif %}
     {% endif %}

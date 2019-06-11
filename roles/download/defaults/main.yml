@@ -97,7 +97,7 @@ crictl_checksums:
     v1.14.0: 483c90a9fe679590df4332ba807991c49232e8cd326c307c575ecef7fe22327b
     v1.13.0: 9bdbea7a2b382494aff2ff014da328a042c5aba9096a7772e57fdf487e5a1d51
 
-# Checksums
+# Checksums 
 hyperkube_checksums:
   arm:
     v1.14.3: 3fac785261bcf79f7a80b12c4a1dda893ce8c0879caf57b36d4701730671b574
