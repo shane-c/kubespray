@@ -306,6 +306,27 @@ resource "openstack_compute_instance_v2" "k8s_master_no_floating_ip" {
   }
 }
 
+resource "openstack_networking_port_v2" "k8s_master_no_floating_ip_no_etcd" {
+  name           = "port_1"
+  count          = "${var.number_of_k8s_masters_no_floating_ip_no_etcd}"
+  admin_state_up = "true"
+  network_id     = "${var.real_network_id}"
+
+  depends_on = [
+    "data.openstack_networking_subnet_v2.k8s_network_subnet"
+  ]
+
+  security_group_ids = ["${openstack_networking_secgroup_v2.k8s_master.id}",
+    "${openstack_networking_secgroup_v2.k8s.id}",
+    "${openstack_networking_secgroup_v2.k8s-global.id}"
+  ]
+
+  allowed_address_pairs = [
+    { ip_address = "${var.service_cidr}" },
+    { ip_address = "${var.cluster_cidr}" },
+  ]
+}
+
 resource "openstack_compute_instance_v2" "k8s_master_no_floating_ip_no_etcd" {
   name              = "${var.cluster_name}-k8s-master-ne-nf-${count.index+1}"
   count             = "${var.number_of_k8s_masters_no_floating_ip_no_etcd}"
@@ -316,21 +337,16 @@ resource "openstack_compute_instance_v2" "k8s_master_no_floating_ip_no_etcd" {
   user_data         = "${var.openstack_user_data}"
 
   depends_on = [
-    "data.openstack_networking_subnet_v2.k8s_network_subnet"
+    "openstack_networking_port_v2.k8s_master_no_floating_ip_no_etcd"
   ]
   
   network {
-    name = "${var.network_name}"
+    port = "${element(openstack_networking_port_v2.k8s_master_no_floating_ip_no_etcd.*.id, count.index)}"
   }
 
   scheduler_hints {
     group = "${join("", openstack_compute_servergroup_v2.master_aa_group.*.id)}"
   }
-
-  security_groups = ["${openstack_networking_secgroup_v2.k8s_master.name}",
-    "${openstack_networking_secgroup_v2.k8s.name}",
-    "${openstack_networking_secgroup_v2.k8s-global.name}",
-  ]
 
   metadata = {
     ssh_user         = "${var.ssh_user}"
