@@ -221,7 +221,7 @@ resource "openstack_compute_instance_v2" "k8s_master_no_etcd" {
   ]
 
   network {
-    port = "${element(openstack_networking_port_v2.k8s_master_no_etcd.*.id, count.index)}"
+    name = "${var.network_name}"
   }
 
   scheduler_hints {
@@ -341,7 +341,7 @@ resource "openstack_compute_instance_v2" "k8s_master_no_floating_ip_no_etcd" {
   ]
   
   network {
-    port = "${element(openstack_networking_port_v2.k8s_master_no_floating_ip_no_etcd.*.id, count.index)}"
+    name = "${var.network_name}"
   }
 
   scheduler_hints {
@@ -422,7 +422,7 @@ resource "openstack_compute_instance_v2" "k8s_node_no_floating_ip" {
   ]
 
   network {
-    port = "${element(openstack_networking_port_v2.k8s_node_no_floating_ip.*.id, count.index)}"
+    name = "${var.network_name}"
   }
 
   security_groups = ["${openstack_networking_secgroup_v2.k8s.name}",
