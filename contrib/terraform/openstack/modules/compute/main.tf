@@ -344,6 +344,11 @@ resource "openstack_compute_instance_v2" "k8s_master_no_floating_ip_no_etcd" {
     name = "${var.network_name}"
   }
 
+  security_groups = ["${openstack_networking_secgroup_v2.k8s.name}",
+    "${openstack_networking_secgroup_v2.k8s_master.name}",
+    "${openstack_networking_secgroup_v2.k8s-global.name}",
+  ]
+
   scheduler_hints {
     group = "${join("", openstack_compute_servergroup_v2.master_aa_group.*.id)}"
   }
@@ -428,6 +433,7 @@ resource "openstack_compute_instance_v2" "k8s_node_no_floating_ip" {
   security_groups = ["${openstack_networking_secgroup_v2.k8s.name}",
     "${openstack_networking_secgroup_v2.worker.name}",
     "${openstack_networking_secgroup_v2.k8s-global.name}",
+    "${data.openstack_networking_secgroup_v2.default.name}",
   ]
 
   metadata = {
