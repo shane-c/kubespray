@@ -221,7 +221,7 @@ resource "openstack_compute_instance_v2" "k8s_master_no_etcd" {
   ]
 
   network {
-    name = "${var.network_name}"
+    port = "${openstack_networking_port_v2.k8s_master_no_etcd.*.id[count.index]}"
   }
 
   scheduler_hints {
@@ -341,13 +341,8 @@ resource "openstack_compute_instance_v2" "k8s_master_no_floating_ip_no_etcd" {
   ]
   
   network {
-    name = "${var.network_name}"
+    port = "${openstack_networking_port_v2.k8s_master_no_floating_ip_no_etcd.*.id[count.index]}"
   }
-
-  security_groups = ["${openstack_networking_secgroup_v2.k8s.name}",
-    "${openstack_networking_secgroup_v2.k8s_master.name}",
-    "${openstack_networking_secgroup_v2.k8s-global.name}",
-  ]
 
   scheduler_hints {
     group = "${join("", openstack_compute_servergroup_v2.master_aa_group.*.id)}"
@@ -427,13 +422,12 @@ resource "openstack_compute_instance_v2" "k8s_node_no_floating_ip" {
   ]
 
   network {
-    name = "${var.network_name}"
+    port = "${openstack_networking_port_v2.k8s_node_no_floating_ip.*.id[count.index]}"
   }
 
   security_groups = ["${openstack_networking_secgroup_v2.k8s.name}",
     "${openstack_networking_secgroup_v2.worker.name}",
     "${openstack_networking_secgroup_v2.k8s-global.name}",
-    "${data.openstack_networking_secgroup_v2.default.name}",
   ]
 
   metadata = {
