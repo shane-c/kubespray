@@ -132,6 +132,10 @@ resource "openstack_compute_instance_v2" "bastion" {
     "data.openstack_networking_subnet_v2.k8s_network_subnet"
   ]
 
+  lifecycle {
+    ignore_changes = [ "user_data" ]
+  }
+  
   network {
     name = "${var.network_name}"
   }
@@ -162,6 +166,10 @@ resource "openstack_compute_instance_v2" "k8s_master" {
   depends_on = [
     "data.openstack_networking_subnet_v2.k8s_network_subnet"
   ]
+  
+  lifecycle {
+    ignore_changes = [ "user_data" ]
+  }
   
   network {
     name = "${var.network_name}"
@@ -220,6 +228,10 @@ resource "openstack_compute_instance_v2" "k8s_master_no_etcd" {
     "openstack_networking_port_v2.k8s_master_no_etcd"
   ]
 
+  lifecycle {
+    ignore_changes = [ "user_data" ]
+  }
+  
   network {
     port = "${openstack_networking_port_v2.k8s_master_no_etcd.*.id[count.index]}"
   }
@@ -256,6 +268,10 @@ resource "openstack_compute_instance_v2" "etcd" {
     "data.openstack_networking_subnet_v2.k8s_network_subnet"
   ]
   
+  lifecycle {
+    ignore_changes = [ "user_data" ]
+  }
+  
   network {
     name = "${var.network_name}"
   }
@@ -286,6 +302,10 @@ resource "openstack_compute_instance_v2" "k8s_master_no_floating_ip" {
   depends_on = [
     "data.openstack_networking_subnet_v2.k8s_network_subnet"
   ]
+  
+  lifecycle {
+    ignore_changes = [ "user_data" ]
+  }
   
   network {
     name = "${var.network_name}"
@@ -340,6 +360,10 @@ resource "openstack_compute_instance_v2" "k8s_master_no_floating_ip_no_etcd" {
     "openstack_networking_port_v2.k8s_master_no_floating_ip_no_etcd"
   ]
   
+  lifecycle {
+    ignore_changes = [ "user_data" ]
+  }
+
   network {
     port = "${openstack_networking_port_v2.k8s_master_no_floating_ip_no_etcd.*.id[count.index]}"
   }
@@ -367,6 +391,10 @@ resource "openstack_compute_instance_v2" "k8s_node" {
     "data.openstack_networking_subnet_v2.k8s_network_subnet"
   ]
 
+  lifecycle {
+    ignore_changes = [ "user_data" ]
+  }
+  
   network {
     name = "${var.network_name}"
   }
@@ -421,6 +449,10 @@ resource "openstack_compute_instance_v2" "k8s_node_no_floating_ip" {
     "openstack_networking_port_v2.k8s_node_no_floating_ip"
   ]
 
+  lifecycle {
+    ignore_changes = [ "user_data" ]
+  }
+  
   network {
     port = "${openstack_networking_port_v2.k8s_node_no_floating_ip.*.id[count.index]}"
   }
@@ -482,6 +514,10 @@ resource "openstack_compute_instance_v2" "glusterfs_node_no_floating_ip" {
   depends_on = [
     "data.openstack_networking_subnet_v2.k8s_network_subnet"
   ]
+  
+  lifecycle {
+    ignore_changes = [ "user_data" ]
+  }
   
   network {
     name = "${var.network_name}"
